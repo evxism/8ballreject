@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>8BR - music</title>
+    <link rel="shortcut icon" href="https://file.garden/aduCeQ57_HghQxsz/site-icon.gif">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Homemade+Apple&display=swap" rel="stylesheet">
+    <style>
+      body {
+        background: #000 url(https://files.catbox.moe/4qobm8.jpg);
+        font-family: calibri, verdana, arial;
+        font-size: 11px;
+        color: #000;
+        letter-spacing: 1px;
+        line-height: 11px;
+        margin: 0;
+        padding: 0;
+      }
+
+      a {
+        text-decoration: none;
+        color: #45AD63;
+        font-weight: bold;
+      }
+
+      a:hover {
+        color: #000000;
+      }
+
+      b {
+        color: #0DA63F;
+      }
+
+      i {
+        font-style: italic;
+        color: #911010;
+      }
+
+      u {
+        color: #BD5E5E;
+        text-decoration: none;
+      }
+
+      #layout {
+        width: 650px;
+        min-height: 500px;
+        margin: 40px auto;
+      }
+
+      /* HEADER */
+      #header {
+        width: 650px;
+        margin: 0 auto;
+        height: 50px;
+        text-align: center;
+      }
+
+      #sitename a {
+        font: 40px 'Homemade Apple', cursive;
+        color: #B31919;
+        letter-spacing: 3px;
+      }
+
+      /* NAVIGATION */
+      #navigation {
+        width: 650px;
+        margin: 0 auto 5px auto;
+        text-align: center;
+        border-radius: 5px;
+        padding-top: 9px;
+        opacity: 60%;
+      }
+
+      #navigation a {
+        width: 80px;
+        display: inline-block;
+        background: #000000;
+        border: 1px solid #D7DBD9;
+        font: bold 9px monospace;
+        text-transform: uppercase;
+        padding: 2px;
+        letter-spacing: 3px;
+        color: #21ED63;
+        border-radius: 2px;
+        margin-right: 1px;
+      }
+
+      #navigation a:hover {
+        background: #73F58C;
+        color: #000000;
+      }
+
+      /* DISC COLLECTION */
+      #disc-collection {
+        width: 100%;
+        height: 240px;
+        margin-top: 30px;
+        margin-bottom: -5px;
+        display: flex;
+        gap: 10px;
+      }
+
+      #disc-collection .disc {
+        position: relative;
+        perspective: 500px;
+        width: 20px;
+        transition: width 0.5s;
+      }
+
+      #disc-collection .disc:hover {
+        width: 200px;
+      }
+
+      #disc-collection img {
+        width: 183px;
+        height: 180px;
+        object-fit: cover;
+        border-radius: 4px;
+        margin-left: 20px;
+        transition: 0.5s;
+        transform: rotateY(5deg);
+      }
+
+      #disc-collection .disc:hover img {
+        transform: rotateY(1deg);
+        margin-top: -25px;
+      }
+
+      .album-title {
+        visibility: hidden;
+        position: absolute;
+        bottom: 30px;
+        left: 0;
+        width: 100%;
+        text-align: center;
+        color: #fff;
+        font-size: 10px;
+      }
+
+      .disc:hover .album-title {
+        visibility: visible;
+      }
+
+      .comment-container {
+        width: 230px;
+        background: #111;
+        border: 1px solid #21ed63;
+        border-radius: 5px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+        padding: 10px;
+        cursor: grab;
+        /* indicates draggable */
+        position: fixed;
+        /* allows free movement */
+        top: 320px;
+        /* initial position */
+        left: 180px;
+        z-index: 1000;
+        box-sizing: border-box;
+      }
+
+      .comment-container:active {
+        cursor: grabbing;
+      }
+
+      .comment-container h1 {
+        font-family: 'Homemade Apple', cursive;
+        font-size: 18px;
+        color: #911010;
+        text-align: center;
+        margin-bottom: 12px;
+      }
+
+      textarea {
+        width: 100%;
+        box-sizing: border-box;
+        width: 210px;
+        height: 80px;
+        background: #fff;
+        color: #000;
+        border: 2px solid #21ED63;
+        border-radius: 4px;
+        padding: 6px;
+        font-size: 11px;
+        resize: none;
+        margin-bottom: 10px;
+        font-family: calibri;
+      }
+
+      button {
+        width: 100%;
+        padding: 6px;
+        background: #21ED63;
+        color: #000;
+        border: none;
+        border-radius: 3px;
+        cursor: pointer;
+        font-weight: bold;
+        font-size: 11px;
+        text-transform: uppercase;
+      }
+
+      button:hover {
+        background: #911010;
+        color: #fff;
+      }
+
+      #comments-list {
+        max-height: 180px;
+        /* around 3-4 comments */
+        overflow-y: auto;
+        overflow-x: hidden;
+        margin-top: 10px;
+      }
+
+      #comments-list::-webkit-scrollbar {
+        width: 6px;
+      }
+
+      #comments-list::-webkit-scrollbar-thumb {
+        background: grey;
+        border-radius: 10px;
+      }
+
+      #comments-list::-webkit-scrollbar-track {
+        background: #111;
+      }
+
+      .comment {
+        background: #fff;
+        color: #000;
+        font-size: 11px;
+        border: 1px solid #21ED63;
+        border-radius: 4px;
+        padding: 6px;
+        margin-bottom: 8px;
+        word-wrap: break-word;
+        box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+      }
+
+      .comment-time {
+        font-size: 10px;
+        color: #911010;
+        margin-top: 3px;
+        text-align: right;
+        font-family: monospace;
+      }
+
+      /* COLUMNS */
+      #left,
+      #content,
+      #right {
+        float: left;
+        padding: 5px;
+        box-sizing: border-box;
+      }
+
+      #left {
+        width: 170px;
+      }
+
+      #content {
+        width: 310px;
+      }
+
+      #right {
+        width: 170px;
+      }
+
+      /* BOXES */
+      .box {
+        background: #ffffff;
+        border: 2px solid #21ED63;
+        box-shadow: 1px 2px #000000;
+        border-radius: 0 0 3px 3px;
+        padding: 5px;
+        margin-bottom: 10px;
+      }
+
+      .box-scroll {
+        background: #ffffff;
+        border: 2px solid #21ED63;
+        box-shadow: 1px 2px #000000;
+        border-radius: 0 0 3px 3px;
+        max-height: 250px;
+        padding: 5px;
+        margin-bottom: 10px;
+        height: 350px;
+        overflow-y: auto;
+        overflow-x: hidden;
+      }
+
+      .title {
+        font: 10px monospace;
+        text-transform: uppercase;
+        text-align: center;
+        color: #EB7070;
+        background: #000;
+        letter-spacing: 3px;
+        padding: 4px 8px 2px;
+        border-left: 1px solid #21ED63;
+        border-right: 1px solid #21ED63;
+        border-top: 1px solid #21ED63;
+        border-radius: 3px 3px 0 0;
+      }
+
+      /* MUSIC LIST */
+      .music-list {
+        width: 100%;
+      }
+
+      .track {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 8px 4px;
+        border-bottom: 1px solid #d8d8d8;
+        transition: 0.2s;
+      }
+
+      .track {
+        cursor: pointer;
+      }
+
+      .track:last-child {
+        border-bottom: none;
+      }
+
+      .track:hover {
+        background: #f3fff6;
+      }
+
+      .track img {
+        width: 55px;
+        height: 55px;
+        border-radius: 4px;
+        object-fit: cover;
+        border: 1px solid #d8d8d8;
+      }
+
+      .track-info {
+        flex: 1;
+        min-width: 0;
+      }
+
+      .track-title-row {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+
+      .track-title {
+        font-size: 13px;
+        font-family: calibri;
+        letter-spacing: 1px;
+        color: #111;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .track-artist {
+        color: #0DA63F;
+        font-style: italic;
+        font-size: 11px;
+        margin-top: 5px;
+      }
+
+      .explicit {
+        background: #7d7d7d;
+        color: #fff;
+        font: bold 10px calibri;
+        padding: 1px 3px;
+        border-radius: 2px;
+      }
+
+      /* AUDIO PLAYER */
+      #audio-container {
+        position: fixed;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 9999;
+      }
+
+      #player {
+        width: 300px;
+        height: 35px;
+      }
+
+      /* FOOTER */
+      #footer {
+        width: 150px;
+        background: #000000;
+        opacity: 80%;
+        border: 1px solid #D7DBD9;
+        border-radius: 5px;
+        margin: 20px auto;
+        text-align: center;
+        clear: both;
+        padding: 5px 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="layout">
+      <!-- HEADER -->
+      <div id="header">
+        <div id="sitename">
+          <a href="">8ball reject</a>
+        </div>
+      </div>
+      <!-- NAV -->
+      <div id="navigation">
+        <a href="/home">home</a>
+        <a href="/about">about</a>
+        <a href="/journal">journal</a>
+        <a href="/music">music</a>
+        <a href="/books">books</a>
+        <a href="/archive">archive</a>
+      </div>
+      <!-- DISC COLLECTION -->
+      <div id="disc-collection">
+        <div class="disc">
+          <img src="https://file.garden/aduCeQ57_HghQxsz/music/raop.png">
+          <div class="album-title">cro - raop</div>
+        </div>
+        <div class="disc">
+          <img src="https://file.garden/aduCeQ57_HghQxsz/music/artpop.png">
+          <div class="album-title">lady gaga - artpop</div>
+        </div>
+        <div class="disc">
+          <img src="https://file.garden/aduCeQ57_HghQxsz/music/592x592bb.png">
+          <div class="album-title">hyukoh - 23</div>
+        </div>
+        <div class="disc">
+          <img src="https://file.garden/aduCeQ57_HghQxsz/music/meteora.png">
+          <div class="album-title">linkin park - meteora</div>
+        </div>
+        <div class="disc">
+          <img src="https://file.garden/aduCeQ57_HghQxsz/music/multitude.webp">
+          <div class="album-title">stromae - multitude</div>
+        </div>
+        <div class="disc">
+          <img src="https://file.garden/aduCeQ57_HghQxsz/music/asymmetry.png">
+          <div class="album-title">mallory knox - asymmetry</div>
+        </div>
+        <div class="disc">
+          <img src="https://file.garden/aduCeQ57_HghQxsz/music/borntodie.png">
+          <div class="album-title">lana del rey - born to die</div>
+        </div>
+        <div class="disc">
+          <img src="https://file.garden/aduCeQ57_HghQxsz/music/battle-gardens.png">
+          <div class="album-title">greta van fleet - the battle at garden's gate</div>
+        </div>
+        <div class="disc">
+          <img src="https://file.garden/aduCeQ57_HghQxsz/music/saturation.png">
+          <div class="album-title">brockhampton - saturation II</div>
+        </div>
+        <div class="disc">
+          <img src="https://file.garden/aduCeQ57_HghQxsz/music/americanidiot.png">
+          <div class="album-title">green day - american idiot</div>
+        </div>
+      </div>
+      <div class="comment-container" id="comment-box">
+        <h1>recommendations</h1>
+        <textarea id="comment-input" placeholder="write here..."></textarea>
+        <button id="submit-btn">submit</button>
+        <div id="comments-list"></div>
+      </div>
+      <!-- LEFT -->
+      <div id="left">
+  <div class="title"></div>
+
+  <div class="box">
+    <i>these are my favorite albums ever.</i>
+
+    <p>
+      some of them i listen to from start to finish,
+      others i only listen to separately because my brain works like that.
+    </p>
+
+    <p>
+      or maybe it's just
+      <b>
+        <a href="https://en.wikipedia.org/wiki/Misophonia">#misophonia</a>
+      </b>
+    </p>
+  </div>
+
+  <div class="title"></div>
+
+  <div class="box">
+    lately, i've been struggling with finding new music or artists to listen to,
+    so any <u>recommendation</u> is welcome; you can send a message on the box here.
+  </div>
+</div>
+      <!-- CONTENT -->
+      <div id="content">
+        <div class="title">my 2026 playlist</div>
+        <div class="box-scroll">
+          <div class="music-list">
+            <div class="track" data-song="https://file.garden/aduCeQ57_HghQxsz/music/playlist/music/Evergrey%20-%20The%20World%20Is%20On%20Fire.mp3">
+              <img src="https://file.garden/aduCeQ57_HghQxsz/music/playlist/evergrey.png">
+              <div class="track-info">
+                <div class="track-title-row">
+                  <div class="track-title">the world is on fire</div>
+                </div>
+                <div class="track-artist">evergrey</div>
+              </div>
+            </div>
+            <div class="track" data-song="https://file.garden/aduCeQ57_HghQxsz/music/playlist/music/Alok%20%26%20Khalid%20-%20Dive%20Into%20Me.mp3">
+              <img src="https://file.garden/aduCeQ57_HghQxsz/music/playlist/alok-khalid.png">
+              <div class="track-info">
+                <div class="track-title-row">
+                  <div class="track-title">dive into me</div>
+                </div>
+                <div class="track-artist">alok, khalid</div>
+              </div>
+            </div>
+            <div class="track" data-song="https://file.garden/aduCeQ57_HghQxsz/music/playlist/music/The%20Band%20CAMINO%20-%20Holly!.mp3">
+              <img src="https://file.garden/aduCeQ57_HghQxsz/music/playlist/the%20band%20camino.png">
+              <div class="track-info">
+                <div class="track-title-row">
+                  <div class="track-title">holly!</div>
+                </div>
+                <div class="track-artist">the band CAMINO</div>
+              </div>
+            </div>
+            <div class="track" data-song="https://file.garden/aduCeQ57_HghQxsz/music/playlist/music/Dotan%20-%20There%20Will%20Be%20a%20Way.mp3">
+              <img src="https://file.garden/aduCeQ57_HghQxsz/music/playlist/daton.png">
+              <div class="track-info">
+                <div class="track-title-row">
+                  <div class="track-title">there will be a way</div>
+                </div>
+                <div class="track-artist">dotan</div>
+              </div>
+            </div>
+            <div class="track" data-song="https://file.garden/aduCeQ57_HghQxsz/music/playlist/music/Fleetwood%20Mac%20-%20The%20Chain%20(2004%20Remaster).mp3">
+              <img src="https://file.garden/aduCeQ57_HghQxsz/music/playlist/fleetwood%20mac.png">
+              <div class="track-info">
+                <div class="track-title-row">
+                  <div class="track-title">the chain</div>
+                </div>
+                <div class="track-artist">fleetwood mac</div>
+              </div>
+            </div>
+            <div class="track" data-song="https://file.garden/aduCeQ57_HghQxsz/music/playlist/music/Michael%20Jackson%20-%20Who%20Is%20It.mp3">
+              <img src="https://file.garden/aduCeQ57_HghQxsz/music/playlist/michael%20jackson.png">
+              <div class="track-info">
+                <div class="track-title-row">
+                  <div class="track-title">who is it</div>
+                </div>
+                <div class="track-artist">michael jackson</div>
+              </div>
+            </div>
+            <div class="track" data-song="https://file.garden/aduCeQ57_HghQxsz/music/playlist/music/Gorillaz%20-%20New%20Gold%20(feat.%20Tame%20Impala%20and%20Bootie%20Brown).mp3">
+              <img src="https://file.garden/aduCeQ57_HghQxsz/music/playlist/gorillaz.png">
+              <div class="track-info">
+                <div class="track-title-row">
+                  <div class="track-title">new gold (feat bootie brown & tame impala)</div>
+                  <div class="explicit">E</div>
+                </div>
+                <div class="track-artist">gorillaz</div>
+              </div>
+            </div>
+            <div class="track" data-song="https://file.garden/aduCeQ57_HghQxsz/music/playlist/music/The%20Strokes%20-%20Machu%20Picchu.mp3">
+              <img src="https://file.garden/aduCeQ57_HghQxsz/music/playlist/the%20strokes.png">
+              <div class="track-info">
+                <div class="track-title-row">
+                  <div class="track-title">machu picchu</div>
+                </div>
+                <div class="track-artist">the strokes</div>
+              </div>
+            </div>
+            <div class="track" data-song="https://file.garden/aduCeQ57_HghQxsz/music/playlist/music/The%20Neighbourhood%20-%20Fallen%20Star.mp3">
+              <img src="https://file.garden/aduCeQ57_HghQxsz/music/playlist/the%20nbhd.png">
+              <div class="track-info">
+                <div class="track-title-row">
+                  <div class="track-title">fallen star</div>
+                </div>
+                <div class="track-artist">the neighbourhood</div>
+              </div>
+            </div>
+            <div class="track" data-song="https://file.garden/aduCeQ57_HghQxsz/music/playlist/music/Lykke%20Li%20-%20Happy%20Now.mp3">
+              <img src="https://file.garden/aduCeQ57_HghQxsz/music/playlist/lykke%20li.png">
+              <div class="track-info">
+                <div class="track-title-row">
+                  <div class="track-title">happy now</div>
+                  <div class="explicit">E</div>
+                </div>
+                <div class="track-artist">lykke li</div>
+              </div>
+            </div>
+            <div class="track" data-song="https://file.garden/aduCeQ57_HghQxsz/music/playlist/music/DE'WAYNE%20%26%20Lenny%20Kravitz%20-%20highway%20robbery.mp3">
+              <img src="https://file.garden/aduCeQ57_HghQxsz/music/playlist/de%20wayne-lenny%20kravitz.png">
+              <div class="track-info">
+                <div class="track-title-row">
+                  <div class="track-title">highway robbery</div>
+                </div>
+                <div class="track-artist">de'wayne & lenny kravitz</div>
+              </div>
+            </div>
+            <div class="track" data-song="https://file.garden/aduCeQ57_HghQxsz/music/playlist/music/Boston%20Manor%20-%20Horses%20In%20A%20Dream.mp3">
+              <img src="https://file.garden/aduCeQ57_HghQxsz/music/playlist/boston%20manor.png">
+              <div class="track-info">
+                <div class="track-title-row">
+                  <div class="track-title">horses in a dream</div>
+                </div>
+                <div class="track-artist">boston manor</div>
+              </div>
+            </div>
+            <div class="track" data-song="https://file.garden/aduCeQ57_HghQxsz/music/playlist/music/The-Smashing-Pumpkins-Violet-Rays.mp3">
+              <img src="https://file.garden/aduCeQ57_HghQxsz/music/playlist/360x360bb.png">
+              <div class="track-info">
+                <div class="track-title-row">
+                  <div class="track-title">violet rays</div>
+                </div>
+                <div class="track-artist">the smashing pumpkins</div>
+              </div>
+            </div>
+            <div class="track" data-song="https://file.garden/aduCeQ57_HghQxsz/music/playlist/music/Movements%20-%20Back%20in%20My%20Ways.mp3">
+              <img src="https://file.garden/aduCeQ57_HghQxsz/music/playlist/movements.png">
+              <div class="track-info">
+                <div class="track-title-row">
+                  <div class="track-title">back in my ways</div>
+                </div>
+                <div class="track-artist">movements</div>
+              </div>
+            </div>
+             <div class="track" data-song="https://file.garden/aduCeQ57_HghQxsz/music/playlist/music/Blondshell%20-%20Heart%20Has%20To%20Work%20So%20Hard.mp3">
+              <img src="https://file.garden/aduCeQ57_HghQxsz/music/playlist/blondshell.png">
+              <div class="track-info">
+                <div class="track-title-row">
+                  <div class="track-title">heart has to work so hard</div>
+                </div>
+                <div class="track-artist">blondshell</div>
+              </div>
+            </div>
+            <div class="track" data-song="https://file.garden/aduCeQ57_HghQxsz/music/playlist/music/Twenty%20Seventy-Three.mp3">
+              <img src="https://file.garden/aduCeQ57_HghQxsz/music/playlist/alt.png">
+              <div class="track-info">
+                <div class="track-title-row">
+                  <div class="track-title">twenty seventy-three</div>
+                </div>
+                <div class="track-artist">alt.</div>
+              </div>
+            </div>
+            <div class="track" data-song="https://file.garden/aduCeQ57_HghQxsz/music/playlist/music/ROCKSTAR.mp3">
+              <img src="https://file.garden/aduCeQ57_HghQxsz/music/playlist/banksarcade.png">
+              <div class="track-info">
+                <div class="track-title-row">
+                  <div class="track-title">rockstar</div>
+                  <div class="explicit">E</div>
+                </div>
+                <div class="track-artist">banks arcade</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- RIGHT -->
+      <div id="right">
+  <div class="title"></div>
+
+  <div class="box">
+    <span style="display:block; text-align:right;">
+      <b>🠘</b> my <u>"current" playlist</u> is always kind of short,
+      because i am not good with repetitive sounds a lot,
+      so i tend to delete songs if i get tired of hearing them.
+    </span>
+  </div>
+
+  <div class="title"></div>
+
+  <div class="box">
+    <span style="display:block; text-align:right;">
+
+      <center>
+        <a href="https://music.apple.com/it/playlist/currently/pl.u-EdAVz4qsDl4qxaB">
+          <img src="https://file.garden/aduCeQ57_HghQxsz/music-note.png">
+          <img src="https://file.garden/aduCeQ57_HghQxsz/music-note.png">
+          <img src="https://file.garden/aduCeQ57_HghQxsz/music-note.png">
+        </a>
+      </center>
+
+      <br>
+
+      it seems that lately i have been into indie rock,
+      alternative & somewhat electronic music a lot.
+
+      <br><br>
+
+      i like almost every genre of music,
+      reggaeton is the only one i'd say i dislike.
+
+      <i>
+        and i love listening to songs in different languages a lot!
+      </i>
+
+    </span>
+  </div>
+</div>
+    <!-- DO NOT REMOVE THE CREDITS, THANK YOU!! -->
+    <div id="footer">
+      <b>
+        <span style="color:#b31919">layout:</span>
+      </b>
+      <a href="http://itinerae.blogspot.com">itinerae</a>
+    </div>
+    <div id="audio-container">
+      <audio id="player" controls style="display:none;"></audio>
+    </div>
+    <script>
+      const player = document.getElementById("player");
+      document.querySelectorAll(".track").forEach(track => {
+        track.addEventListener("click", () => {
+          // get mp3 file
+          const song = track.getAttribute("data-song");
+          // change player source
+          player.src = song;
+          // show player
+          player.style.display = "block";
+          // play song
+          player.play();
+        });
+      });
+    </script>
+    <script>
+      // DRAGGABLE
+      const box = document.getElementById('comment-box');
+      let isDragging = false;
+      let offsetX = 0;
+      let offsetY = 0;
+      box.addEventListener('mousedown', e => {
+        // don't drag when clicking textarea or button
+        if (e.target.tagName === "TEXTAREA" || e.target.tagName === "BUTTON") return;
+        isDragging = true;
+        offsetX = e.clientX - box.getBoundingClientRect().left;
+        offsetY = e.clientY - box.getBoundingClientRect().top;
+      });
+      document.addEventListener('mousemove', e => {
+        if (!isDragging) return;
+        box.style.left = (e.clientX - offsetX) + 'px';
+        box.style.top = (e.clientY - offsetY) + 'px';
+      });
+      document.addEventListener('mouseup', () => {
+        isDragging = false;
+      });
+    </script>
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+
+  console.log("DOM READY");
+
+  const SUPABASE_URL = "https://mbscoteclbnamirdgbdy.supabase.co";
+  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1ic2NvdGVjbGJuYW1pcmRnYmR5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk4MTE4NzUsImV4cCI6MjA5NTM4Nzg3NX0.999wuigQocrbqn3U6Cirjnzs98UJQ6g-ylilTmqk26M";
+
+  const supabase = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_ANON_KEY
+  );
+
+  // TEST
+  console.log("SUPABASE URL:", SUPABASE_URL);
+
+  fetch("https://mbscoteclbnamirdgbdy.supabase.co/rest/v1/")
+    .then(r => console.log("FETCH OK", r.status))
+    .catch(err => console.error("FETCH FAILED", err));
+
+  const submitBtn = document.getElementById("submit-btn");
+  const commentInput = document.getElementById("comment-input");
+  const commentsList = document.getElementById("comments-list");
+
+  // rest of your code...
+
+  if (!submitBtn || !commentInput || !commentsList) {
+    console.error("Missing HTML elements!");
+    return;
+  }
+
+  function getCurrentTime() {
+    const now = new Date();
+    return now.toLocaleTimeString([], {
+      hour: "2-digit",
+      minute: "2-digit"
+    });
+  }
+
+  async function loadComments() {
+    const { data, error } = await supabase
+      .from("comments")
+      .select("*")
+      .order("id", { ascending: false });
+
+    if (error) {
+      console.error("LOAD ERROR:", error.message);
+      return;
+    }
+
+    commentsList.innerHTML = "";
+
+    data.forEach((c) => {
+      const el = document.createElement("div");
+      el.className = "comment";
+
+    el.innerHTML = `
+  <div>${c.text}</div>
+  <div class="comment-time">posted at ${c.time}</div>
+`;
+
+commentsList.appendChild(el);
+    });
+  }
+
+ async function postComment() {
+  try {
+    const text = commentInput.value.trim();
+
+    if (!text) {
+      alert("Write something first.");
+      return;
+    }
+
+    console.log("TRYING INSERT...");
+
+    const { data, error } = await supabase
+      .from("comments")
+      .insert([
+        {
+          text,
+          time: getCurrentTime()
+        }
+      ])
+      .select();
+
+    if (error) throw error;
+
+    console.log("SUCCESS:", data);
+
+    commentInput.value = "";
+    loadComments();
+
+  } catch (err) {
+    console.error("FULL ERROR:", err);
+    alert(err.message || "Unknown error");
+  }
+}
+
+submitBtn.addEventListener("click", postComment);
+
+commentInput.addEventListener("keydown", (e) => {
+  if (e.key === "Enter" && !e.shiftKey) {
+    e.preventDefault();
+    postComment();
+  }
+});
+
+loadComments();
+
+});
+</script>
+
+  </body>
+</html>
