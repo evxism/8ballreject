@@ -767,19 +767,6 @@ document.addEventListener("DOMContentLoaded", () => {
   );
 console.log("SUPABASE LOADED?", window.supabase);
   console.log("CLIENT CREATED");
-  
-  // TEST
-  console.log("SUPABASE URL:", SUPABASE_URL);
-
-  fetch("https://mbscoteclbnamirdgbdy.supabase.co/rest/v1/")
-    .then(r => console.log("FETCH OK", r.status))
-    .catch(err => console.error("FETCH FAILED", err));
-
-  const submitBtn = document.getElementById("submit-btn");
-  const commentInput = document.getElementById("comment-input");
-  const commentsList = document.getElementById("comments-list");
-
-  // rest of your code...
 
   if (!submitBtn || !commentInput || !commentsList) {
     console.error("Missing HTML elements!");
